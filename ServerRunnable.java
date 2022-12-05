@@ -1,42 +1,51 @@
 import java.io.*;
 import java.net.Socket;
 public class ServerRunnable implements Runnable {
+    private Server server;
     private Socket sockclient;
     private String name;
-    public ServerRunnable(Socket sockclient) {
-        this.sockclient = sockclient;
-    }
 
-    public void run() {
-        BufferedReader input;
-        PrintWriter output;
-        String message;
+    BufferedReader input;
+    PrintWriter output;
+
+    public ServerRunnable(Socket sockclient, Server server) {
+        this.server = server;
+        this.sockclient = sockclient;
 
         try {
             input = new BufferedReader(new InputStreamReader(this.sockclient.getInputStream()));
             output = new PrintWriter(new OutputStreamWriter(this.sockclient.getOutputStream()), true);
-
-            this.name = input.readLine();
-            if(this.name == null) {
-                this.name = "Anonyme";
-            }
-
-                while (true) {
-                    message = input.readLine();
-                    if (message != null) {
-                        System.out.println(name + ": " + message);
-                    }else{
-                        break;
-                    }
-                    output.println(message);
-                }
-                this.sockclient.close();
-
-        } catch (IOException ex) {
-            System.out.println(this.name + " déconnecté.");
-
-
+            System.out.printf("Client %s connected%n", sockclient.getInetAddress());
+        } catch (IOException e) {
+            System.err.println("Erreur lors de la création des flux : " + e.getMessage());
         }
-
     }
+
+
+    @Override
+    public void run() {
+        try {
+            while (true) {
+                String message = input.readLine();
+                sendMessage(message);
+                findLine(message);
+
+            }
+        } catch (IOException ex) {
+            System.out.println(this.name + " disconnected. (run of ServerRunnable)");
+        } finally {
+            try {
+                input.close();
+                output.close();
+                sockclient.close();
+            } catch (IOException ex) {
+                System.err.println("Error closing socket: " + ex.getMessage());
+            }
+        }
+    }
+
+    public void sendMessage(String message) {
+        output.println(message);
+    }
+
 }

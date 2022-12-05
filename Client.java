@@ -4,36 +4,38 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Client {
-    public static void main(String[] args) {
-        BufferedReader input;
-        PrintWriter output;
 
-        try {
-            Socket sockcli = new Socket("127.0.0.1" ,1234);
-          //  Scanner inputPseudo = new Scanner(System.in);
-           // System.out.println("Entrez un pseudo : ");
-            String pseudo = "PSEUDO";
+    private BufferedReader input;
+    private PrintWriter output;
 
-            while(true) {
-                try {
-                    input = new BufferedReader(new InputStreamReader(sockcli.getInputStream()));
-                    output = new PrintWriter(new OutputStreamWriter(sockcli.getOutputStream()), true);
-
-                    output.println(pseudo);
-
-                    Scanner myObj = new Scanner(System.in);
-
-                    while (true) {
-                        String msg = myObj.nextLine();
-                        output.println(msg);
-//                        System.out.println("msg : " + input.readLine());
-
-                    }
-                } finally {
-                    sockcli.close();
-                }
+    public Client() {
+        while (true) {
+            try {
+                Socket sock = new Socket("localhost", 1234);
+                input = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+                output = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()), true);
+                break;
+            } catch (IOException e) {
+                System.err.println("Erreur lors de la création du socket : " + e.getMessage());
             }
-
-        } catch (IOException ex) {}
+        }
     }
+    public void sendMessage(String message) {
+        output.println(message);
+    }
+
+    public String receiveMessage() {
+        try {
+            return input.readLine();
+        } catch (IOException e) {
+            System.err.println("Erreur lors de la réception d'un message : " + e.getMessage());
+            return "Error receive message";
+        }
+    }
+
+    public static void main(String[] args) {
+        Client client = new Client();
+
+    }
+
 }
