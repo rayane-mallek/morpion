@@ -30,9 +30,8 @@ public class ServerRunnable implements Runnable {
             output.println("Bienvenue " + this.name + "!");
 
             while (true) {
-                System.out.println("C'est à " + server.currentPlayer + " de jouer");
+                message = input.readLine();
                 if (server.currentPlayer == this.name) {
-                    message = input.readLine();
 
                     while (!isValid(message)) {
                         sendMessage("Coup invalide");
@@ -94,6 +93,8 @@ public class ServerRunnable implements Runnable {
             board += "\n";
         }
         server.broadcastMessage(board, this);
+        server.broadcastMessage("C'est a " + server.currentPlayer + " de jouer", this);
+
     }
 
 
@@ -142,6 +143,9 @@ public class ServerRunnable implements Runnable {
     }
 
     public boolean isValid(String move) {
+        if (move.length() != 2) {
+            return false;
+        }
         int[] coordinates = convertStringToCoordinates(move);
 
         try {

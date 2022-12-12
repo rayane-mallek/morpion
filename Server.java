@@ -40,7 +40,6 @@ public class Server {
                     broadcastMessage("Deux clients sont connectés, la partie peut commencer", null);
                     sendBoard();
                 }
-
             }
         }
     }
@@ -77,6 +76,8 @@ public class Server {
             board += "\n";
         }
             broadcastMessage(board, null);
+            broadcastMessage("C'est a " + currentPlayer + " de jouer", null);
+
 
     }
 
