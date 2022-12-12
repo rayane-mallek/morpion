@@ -30,6 +30,7 @@ public class ServerRunnable implements Runnable {
             output.println("Bienvenue " + this.name + "!");
 
             while (true) {
+                System.out.println("C'est à " + server.currentPlayer + " de jouer");
                 if (server.currentPlayer == this.name) {
                     message = input.readLine();
 
