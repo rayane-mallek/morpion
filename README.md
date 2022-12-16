@@ -1,4 +1,5 @@
 # morpion
+Compilez le projet `javac *.java` \n
 
 Pour jouer, lancez un serveur :
     `java Server`
