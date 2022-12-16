@@ -1,6 +1,12 @@
 import java.net.Socket;
 import java.io.*;
 
+/**
+ * Classe représentant un client le morpion.
+ * 
+ * Le client peut se connecter au serveur, entrer son pseudo, envoyer et recevoir des messages du serveur.
+ * Il peut également quitter la session en saisissant la commande "exit".
+ */
 public class Client {
     public static void main(String[] args) {
         BufferedReader input;
@@ -35,7 +41,6 @@ public class Client {
                 output.println(messageToSend);
             }
 
-//            sockcli.close();
         } catch (IOException ex) {
             // Gestion des erreurs
             System.out.println("Une erreur est survenue : " + ex.getMessage());

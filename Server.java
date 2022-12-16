@@ -4,6 +4,27 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Classe représentant un serveur de jeu de morpion en réseau.
+ * 
+ * Le serveur peut accepter jusqu'à deux clients se connectant simultanément, et gère leur communication
+ * pour jouer une partie de morpion.
+ * 
+ * Le serveur utilise un plateau de jeu sous forme d'un tableau à deux dimensions pour stocker l'état du jeu.
+ * Les valeurs possibles sont :
+ * - EMPTY (0) : case vide
+ * - CROSS (1) : case contenant un "croix"
+ * - NOUGHT (2) : case contenant un "rond"
+ * 
+ * Le serveur utilise également un booléen pour indiquer qui doit jouer à chaque tour :
+ * - Si isCrossTurn est vrai, c'est au joueur "croix" de jouer
+ * - Si isCrossTurn est faux, c'est au joueur "rond" de jouer
+ * 
+ * La classe Server implémente également une liste de clients connectés (classe ServerRunnable) et possède
+ * une méthode broadcastMessage permettant d'envoyer un message à tous les clients connectés.
+ * 
+ * @see ServerRunnable
+ */
 public class Server {
 
     int[][] gameBoard;
@@ -44,6 +65,9 @@ public class Server {
         }
     }
 
+    /**
+    * Envoie un message à tous les clients
+    */
     public void broadcastMessage(String message, ServerRunnable sender) {
         for (ServerRunnable client : clients) {
                 client.sendMessage(message);
@@ -51,6 +75,9 @@ public class Server {
         }
     }
 
+    /**
+    * Envoie le nom du client 1 au client 2
+    */
     public String sendOtherPlayerName(ServerRunnable sender) {
         for (ServerRunnable client : clients) {
             if (client != sender) {
@@ -60,6 +87,9 @@ public class Server {
         return "erreur ):";
     }
 
+    /**
+    * Envoie la grille du morpion aux clients
+    */
     public void sendBoard() {
         String board = "\ta\tb\tc\n";
 
